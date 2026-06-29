@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas de Ecuaciones Lineales - Aula Interactiva</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #13c2c2;
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --success: #52c41a;
+            --error: #ff4d4f;
+            --whatsapp: #25d366;
+            --mail: #ea4335;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #2a4365);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.4rem; }
+        header p { margin: 0.5rem 0 0 0; font-size: 1.2rem; opacity: 0.9; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 1rem; }
+
+        section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        h2 { color: var(--primary); border-bottom: 2px solid #e8e8e8; padding-bottom: 0.5rem; margin-top: 0; }
+        h3 { color: #34495e; margin-top: 1.5rem; }
+
+        .img-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .img-container svg { max-width: 350px; width: 100%; height: auto; }
+
+        .step-list { padding-left: 1.2rem; }
+        .step-list li { margin-bottom: 0.8rem; }
+
+        .example-box {
+            background-color: var(--light);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.05rem;
+            border-radius: 0 4px 4px 0;
+            white-space: pre-line;
+        }
+
+        .verification-box {
+            background-color: #f6ffed;
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        blockquote {
+            background: #fffbe6;
+            border-left: 4px solid #ffe58f;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Estilos de las Tarjetas de Ejercicios */
+        .question-card {
+            background: #fafafa;
+            border: 1px solid #e8e8e8;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .option-btn {
+            background: white;
+            border: 1px solid #d9d9d9;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover:not([disabled]) { background: #e6f7ff; border-color: #91d5ff; }
+        .option-btn.correct { background-color: #f6ffed; border-color: var(--success); color: #389e0d; font-weight: bold; }
+        .option-btn.incorrect { background-color: #fff1f0; border-color: var(--error); color: #cf1322; }
+
+        .feedback {
+            margin-top: 1rem;
+            font-weight: bold;
+            display: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        .feedback.correct { color: #389e0d; display: block; background: #f6ffed; }
+        .feedback.incorrect { color: #cf1322; display: block; background: #fff1f0; }
+
+        .score-container {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #e6f7ff;
+            border-radius: 6px;
+            border: 1px solid #91d5ff;
+        }
+
+        /* Formulario de envío */
+        .send-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 2px dashed #e8e8e8; }
+        .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-group label { font-weight: bold; }
+        .form-control { padding: 0.75rem; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 1rem; }
+        
+        .btn-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+        @media (max-width: 600px) { .btn-actions { grid-template-columns: 1fr; } }
+
+        .btn-send {
+            color: white; border: none; padding: 1rem; border-radius: 4px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-send:hover { opacity: 0.9; }
+        .btn-wapp { background-color: var(--whatsapp); }
+        .btn-email { background-color: var(--mail); }
+
+        footer { text-align: center; padding: 2rem; color: #7f8c8d; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Sistemas de Ecuaciones Lineales 2x2</h1>
+        <p>Aprende, comprueba y domina los métodos de <strong>Igualación</strong> y <strong>Gráfico</strong></p>
+    </header>
+
+    <div class="container">
+        
+        <section>
+            <h2>¿Qué es un Sistema de Ecuaciones?</h2>
+            <p>Es un conjunto de dos ecuaciones con dos incógnitas (generalmente <strong>x</strong> e <strong>y</strong>). Nuestro objetivo es encontrar el valor común de <strong>x</strong> e <strong>y</strong> que cumpla ambas igualdades al mismo tiempo. Ese punto de encuentro es la <strong>solución única</strong> del sistema.</p>
+        </section>
+
+        <section>
+            <h2>1. Método de Igualación</h2>
+            <p>Este método algebraico consiste en despejar la misma incógnita en ambas ecuaciones para luego igualar las expresiones matemáticas que se obtuvieron.</p>
+            
+            <h3>Pasos para resolver:</h3>
+            <ol class="step-list">
+                <li><strong>Despejar</strong> la misma incógnita (puede ser <i>x</i> o <i>y</i>) en las dos ecuaciones originales.</li>
+                <li><strong>Igualar</strong> las dos expresiones resultantes. Así, transformarás el problema en una ecuación simple de una sola incógnita.</li>
+                <li><strong>Resolver</strong> la ecuación obtenida para hallar el valor numérico de la primera incógnita.</li>
+                <li><strong>Reemplazar</strong> dicho valor en cualquiera de las ecuaciones despejadas en el paso 1 para calcular la otra incógnita.</li>
+            </ol>
+
+            <div class="img-container">
+                <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100%" height="100%" fill="#f8f9fa" rx="8"/>
+                    <text x="50%" y="30" font-family="Arial" font-size="14" font-weight="bold" fill="#2c3e50" text-anchor="middle">Concepto del Método de Igualación</text>
+                    <text x="110" y="65" font-family="Courier New" font-size="18" font-weight="bold" fill="#4a6fa5" text-anchor="middle">x = 5 - y</text>
+                    <text x="200" y="65" font-family="Arial" font-size="24" font-weight="bold" fill="#13c2c2" text-anchor="middle">=</text>
+                    <text x="290" y="65" font-family="Courier New" font-size="18" font-weight="bold" fill="#4a6fa5" text-anchor="middle">x = 1 + y</text>
+                </svg>
+            </div>
+
+            <div class="example-box">
+                <strong>Ejemplo guiado:</strong>
+                Ecuación [1]: &nbsp; x + y = 5
+                Ecuación [2]: &nbsp; x - y = 1
+
+                <strong>Paso 1 (Aislamos x):</strong>
+                De [1]: &nbsp; x = 5 - y
+                De [2]: &nbsp; x = 1 + y
+
+                <strong>Paso 2 y 3 (Igualamos y resolvemos):</strong>
+                5 - y = 1 + y
+                5 - 1 = y + y
+                4 = 2y  &rarr;  <strong>y = 2</strong>
+
+                <strong>Paso 4 (Calculamos x):</strong>
+                x = 5 - (2)  &rarr;  <strong>x = 3</strong>
+
+                <strong>Solución final:</strong> Par ordenado (3, 2).
+            </div>
+        </section>
+
+        <section>
+            <h2>2. Método Gráfico</h2>
+            <p>Cada ecuación de primer grado representa geométricamente una <strong>línea recta</strong> en el plano. El método consiste en graficar simultáneamente ambas rectas y ubicar visualmente el punto donde se cruzan.</p>
+            
+            <h3>Pasos para resolver:</h3>
+            <ol class="step-list">
+                <li><strong>Despejar la incógnita <i>y</i></strong> en ambas ecuaciones para darles la estructura explícita de una función lineal: <code>y = mx + b</code>.</li>
+                <li><strong>Armar una tabla de valores</strong> o utilizar los conceptos de ordenada al origen (<i>b</i>) y pendiente (<i>m</i>) para marcar los puntos correspondientes en la cuadrícula.</li>
+                <li><strong>Trazar con regla</strong> las rectas cruzando los puntos correspondientes.</li>
+                <li><strong>Localizar el punto de cruce</strong>. Las coordenadas espaciales de ese punto <code>(x, y)</code> son la respuesta del ejercicio.</li>
+            </ol>
+
+            blockquote>
+                <strong>¡Clasificación de los sistemas según sus gráficos!</strong><br>
+                • Rectas que se cruzan = <strong>Solución Única</strong> (Sistema Compatible Determinado).<br>
+                • Rectas paralelas que nunca se tocan = <strong>No tiene solución</strong> (Sistema Incompatible).<br>
+                • Rectas coincidentes (una encima de la otra) = <strong>Infinitas soluciones</strong> (Sistema Compatible Indeterminado).
+            </blockquote>
+        </section>
+
+        <section>
+            <h2>3. ¿Cómo verificar el resultado hallado?</h2>
+            <p>Para asegurarte de que tus cálculos matemáticos estén perfectos, debes aplicar la verificación. Consiste en <strong>reemplazar las letras x e y por los números que descubriste</strong> dentro de las dos ecuaciones originales.</p>
+            
+            <div class="verification-box">
+                <strong>Ejemplo de Verificación:</strong><br>
+                Tomemos los resultados del ejemplo anterior: <strong>x = 3</strong>, <strong>y = 2</strong>.<br><br>
+                • <strong>Ecuación [1]:</strong> x + y = 5 &nbsp;&rarr;&nbsp; Reemplazamos: 3 + 2 = 5 &nbsp;&rarr;&nbsp; <code>5 = 5</code> ¡Verifica! ✅<br>
+                • <strong>Ecuación [2]:</strong> x - y = 1 &nbsp;&rarr;&nbsp; Reemplazamos: 3 - 2 = 1 &nbsp;&rarr;&nbsp; <code>1 = 1</code> ¡Verifica! ✅<br><br>
+                <i>Como la igualdad se cumplió para los dos casos, confirmamos sin dudas que el resultado es correcto.</i>
+            </div>
+        </section>
+
+        <section>
+            <h2>Actividad 1: Cuestionario Conceptual</h2>
+            <p>Elige la opción correcta para evaluar tus conocimientos iniciales:</p>
+
+            <div id="quiz-teorico">
+                <div class="question-card" id="qt1">
+                    <p><strong>Pregunta 1.1:</strong> ¿Cuál es el primer paso elemental en el método de igualación?</p>
+                    <div class="options-container">
+                        <button class="option-btn" onclick="checkGroupAnswer('qt1', 'A')">A) Graficar las dos rectas coordenadamente.</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt1', 'B')">B) Despejar la misma incógnita en las dos ecuaciones.</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt1', 'C')">C) Sumar algebraicamente ambas ecuaciones de manera directa.</button>
+                    </div>
+                    <div class="feedback" id="fb_qt1"></div>
+                </div>
+
+                <div class="question-card" id="qt2">
+                    <p><strong>Pregunta 1.2:</strong> Si en el plano cartesiano dos rectas quedan completamente paralelas, significa que el sistema:</p>
+                    <div class="options-container">
+                        <button class="option-btn" onclick="checkGroupAnswer('qt2', 'A')">A) No posee solución alguna.</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt2', 'B')">B) Tiene infinitas soluciones válidas.</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt2', 'C')">C) Tiene solución única en el punto (0,0).</button>
+                    </div>
+                    <div class="feedback" id="fb_qt2"></div>
+                </div>
+
+                <div class="question-card" id="qt3">
+                    <p><strong>Pregunta 1.3:</strong> Al igualar dos expresiones obtienes <code>5 - y = 1 + y</code>. ¿Cuál es el valor correspondiente de <code>y</code>?</p>
+                    <div class="options-container">
+                        <button class="option-btn" onclick="checkGroupAnswer('qt3', 'A')">A) y = 4</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt3', 'B')">B) y = 3</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt3', 'C')">C) y = 2</button>
+                    </div>
+                    <div class="feedback" id="fb_qt3"></div>
+                </div>
+
+                <div class="question-card" id="qt4">
+                    <p><strong>Pregunta 1.4:</strong> ¿Qué representa geométricamente la solución de un sistema lineal 2x2?</p>
+                    <div class="options-container">
+                        <button class="option-btn" onclick="checkGroupAnswer('qt4', 'A')">A) El valor aislado de la ordenada al origen.</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt4', 'B') text-anchor">B) El punto preciso de intersección donde se cruzan las rectas.</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qt4', 'C')">C) El cuadrante donde se traza el plano.</button>
+                    </div>
+                    <div class="feedback" id="fb_qt4"></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Actividad 2: Resolución Práctica</h2>
+            <p>Calcula los siguientes sistemas en tu cuaderno, utiliza el método de verificación, y marca la alternativa correcta:</p>
+
+            <div id="quiz-resolucion">
+                <div class="question-card" id="qr1">
+                    <p><strong>Sistema Practica A:</strong><br>[1] <code>2x + y = 7</code><br>[2] <code>x - y = 2</code></p>
+                    <div class="options-container">
+                        <button class="option-btn" onclick="checkGroupAnswer('qr1', 'A')">A) Solución: (x = 3, y = 1)</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qr1', 'B')">B) Solución: (x = 4, y = -1)</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qr1', 'C')">C) Solución: (x = 2, y = 3)</button>
+                    </div>
+                    <div class="feedback" id="fb_qr1"></div>
+                </div>
+
+                <div class="question-card" id="qr2">
+                    <p><strong>Sistema Practica B:</strong><br>[1] <code>x + 2y = 8</code><br>[2] <code>3x - 2y = 0</code></p>
+                    <div class="options-container">
+                        <button class="option-btn" onclick="checkGroupAnswer('qr2', 'A')">A) Solución: (x = 4, y = 2)</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qr2', 'B')">B) Solución: (x = 2, y = 3)</button>
+                        <button class="option-btn" onclick="checkGroupAnswer('qr2', 'C')">C) Solución: (x = 0, y = 4)</button>
+                    </div>
+                    <div class="feedback" id="fb_qr2"></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Actividad 3: Lectura Directa de Gráficos</h2>
+            <p>Observa con detenimiento las líneas rectas en el plano cartesiano matemático de escala uniforme y encuentra las coordenadas exactas de cruzamiento:</p>
+
+            <div class="question-card" id="ag1">
+                <p><strong>Ejercicio 3.1:</strong> ¿En qué par ordenado se intersecan de forma clara las rectas dadas?</p>
+                <div class="img-container">
+                    <svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0,40 h240 M0,70 h240 M0,100 h240 M0,130 h240 M0,160 h240" stroke="#f0f0f0" stroke-width="1"/>
+                        <path d="M40,0 v200 M70,0 v200 M100,0 v200 M130,0 v200 M160,0 v200 M190,0 v200" stroke="#f0f0f0" stroke-width="1"/>
+                        <line x1="10" y1="130" x2="230" y2="130" stroke="#444" stroke-width="2"/> <line x1="100" y1="10" x2="100" y2="190" stroke="#444" stroke-width="2"/> <text x="130" y="145" font-size="10" text-anchor="middle">1</text>
+                        <text x="160" y="145" font-size="10" text-anchor="middle">2</text>
+                        <text x="88" y="104" font-size="10" text-anchor="end">1</text>
+                        <line x1="70" y1="10" x2="220" y2="160" stroke="#ff4d4f" stroke-width="2.5"/>
+                        <line x1="70" y1="190" x2="220" y2="40" stroke="#52c41a" stroke-width="2.5"/>
+                        <circle cx="160" cy="100" r="5" fill="#13c2c2"/>
+                    </svg>
+                </div>
+                <div class="options-container">
+                    <button class="option-btn" onclick="checkGroupAnswer('ag1', 'A')">A) Solución: (1, 2)</button>
+                    <button class="option-btn" onclick="checkGroupAnswer('ag1', 'B')">B) Solución: (2, 1)</button>
+                    <button class="option-btn" onclick="checkGroupAnswer('ag1', 'C')">C) Solución: (2, 3)</button>
+                </div>
+                <div class="feedback" id="fb_ag1"></div>
+            </div>
+
+            <div class="question-card" id="ag2">
+                <p><strong>Ejercicio 3.2:</strong> Evalúa el comportamiento de las siguientes rectas:</p>
+                <div class="img-container">
+                    <svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="10" y1="100" x2="230" y2="100" stroke="#444" stroke-width="2"/> 
+                        <line x1="100" y1="10" x2="100" y2="170" stroke="#444" stroke-width="2"/> 
+                        <line x1="30" y1="40" x2="210" y2="130" stroke="#ff9c6e" stroke-width="2.5"/>
+                        <line x1="30" y1="80" x2="210" y2="170" stroke="#b7eb8f" stroke-width="2.5"/>
+                    </svg>
+                </div>
+                <div class="options-container">
+                    <button class="option-btn" onclick="checkGroupAnswer('ag2', 'A')">A) No tiene solución (Son rectas paralelas)</button>
+                    <button class="option-btn" onclick="checkGroupAnswer('ag2', 'B')">B) Solución en el punto (0, 0)</button>
+                    <button class="option-btn" onclick="checkGroupAnswer('ag2', 'C')">C) Infinitas soluciones</button>
+                </div>
+                <div class="feedback" id="fb_ag2"></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Actividad 4: Reconocer el Sistema mediante el Gráfico</h2>
+            <p>Mira la gráfica, identifica el punto solución de cruzamiento e investiga (reemplazando los valores) a cuál de los siguientes sistemas pertenece:</p>
+
+            <div class="question-card" id="asys1">
+                <p><strong>Ejercicio 4.1:</strong> Descubre qué sistema corresponde a la gráfica analizando las coordenadas de corte:</p>
+                <div class="img-container">
+                    <svg viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0,40 h240 M0,70 h240 M0,100 h240 M0,130 h240 M0,160 h240" stroke="#f6f6f6" stroke-width="1"/>
+                        <path d="M40,0 v180 M70,0 v180 M100,0 v180 M130,0 v180 M160,0 v180" stroke="#f6f6f6" stroke-width="1"/>
+                        <line x1="10" y1="130" x2="230" y2="130" stroke="#444" stroke-width="2"/> 
+                        <line x1="100" y1="10" x2="100" y2="170" stroke="#444" stroke-width="2"/> 
+                        <text x="130" y="145" font-size="10" text-anchor="middle">1</text>
+                        <text x="88" y="74" font-size="10" text-anchor="end">2</text>
+                        
+                        <line x1="40" y1="40" x2="190" y2="190" stroke="#fa8c16" stroke-width="2.5"/>
+                        <line x1="85" y1="160" x2="145" y2="40" stroke="#13c2c2" stroke-width="2.5"/>
+                        <circle cx="130" cy="70" r="5" fill="#722ed1"/>
+                    </svg>
+                </div>
+                <div class="options-container">
+                    <button class="option-btn" onclick="checkGroupAnswer('asys1', 'A')">A) Sistema:<br>&nbsp;&nbsp;&nbsp;&nbsp;x + y = 4<br>&nbsp;&nbsp;&nbsp;&nbsp;x - y = 1</button>
+                    <button class="option-btn" onclick="checkGroupAnswer('asys1', 'B')">B) Sistema:<br>&nbsp;&nbsp;&nbsp;&nbsp;2x - y = 0<br>&nbsp;&nbsp;&nbsp;&nbsp;x + y = 3</button>
+                    <button class="option-btn" onclick="checkGroupAnswer('asys1', 'C')">C) Sistema:<br>&nbsp;&nbsp;&nbsp;&nbsp;x - 2y = 5<br>&nbsp;&nbsp;&nbsp;&nbsp;2x + y = 6</button>
+                </div>
+                <div class="feedback" id="fb_asys1"></div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Terminar y Enviar Planilla</h2>
+            <div class="score-container">
+                Actividades Resueltas Correctamente: <span id="global-score">0</span> de 9 totales.
+            </div>
+
+            <div class="send-section">
+                <h3>Formulario de Envío Académico</h3>
+                <p>Completa tus datos reales para generar el reporte que recibirá tu profesor:</p>
+                <div class="form-group">
+                    <label for="student-name">Nombre y Apellido del Estudiante:</label>
+                    <input type="text" id="student-name" class="form-control" placeholder="Ej: Benjamín Sosa">
+                </div>
+                <div class="form-group">
+                    <label for="student-grade">Curso y División:</label>
+                    <input type="text" id="student-grade" class="form-control" placeholder="Ej: 3er Año División B">
+                </div>
+                <div class="btn-actions">
+                    <button class="btn-send btn-wapp" onclick="generateReport('whatsapp')">Enviar por WhatsApp</button>
+                    <button class="btn-send btn-email" onclick="generateReport('email')">Enviar por Correo</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Página Escolar Interactiva - Material Didáctico Adaptable</p>
+    </footer>
+
+    <script>
+        // Patrón de corrección de todas las preguntas de la página (9 en total)
+        const respuestasCorrectas = {
+            qt1: 'B', qt2: 'A', qt3: 'C', qt4: 'B',
+            qr1: 'A', qr2: 'A',
+            ag1: 'B', ag2: 'A',
+            asys1: 'B'
+        };
+
+        const retroalimentaciones = {
+            qt1: { correct: "¡Excelente! El primer paso es aislar la misma variable en ambas ecuaciones.", incorrect: "Recuerda repasar el método: El nombre lo dice todo, 'Igualación'." },
+            qt2: { correct: "¡Correcto! Si las líneas jamás se tocan, no hay solución.", incorrect: "Ten en cuenta que la solución es el punto de choque; si no se chocan, no existe solución." },
+            qt3: { correct: "¡Muy bien! Despejando resulta 4 = 2y, por ende y = 2.", incorrect: "Revisa los signos al transponer los términos en la ecuación." },
+            qt4: { correct: "¡Exacto! El cruce geométrico define los valores de la solución.", incorrect: "La respuesta es la coordenada en la que confluyen las dos expresiones." },
+            qr1: { correct: "¡Perfecto! Al verificar: 2(3)+1 = 7 y 3-1 = 2.", incorrect: "Prueba de nuevo. Aplica la verificación sustituyendo los valores." },
+            qr2: { correct: "¡Excelente cálculo! (4,2) hace que ambas ecuaciones se verifiquen.", incorrect: "Revisa la igualación. El resultado adecuado cumple con las sumas." },
+            ag1: { correct: "¡Excelente lectura! La intersección se genera en 2 de X y 1 de Y.", incorrect: "¡Cuidado! Recuerda que el orden del par ordenado es siempre (X, Y)." },
+            ag2: { correct: "¡Así es! Son paralelas, por ende, es un sistema incompatible sin solución.", incorrect: "Visualiza el sentido de las líneas: nunca se interceptarán." },
+            asys1: { correct: "¡Brillante! El corte está en (1,2). Al verificar en B: 2(1)-2=0 y 1+2=3.", incorrect: "Detecta la coordenada de intersección, la cual es (1,2) y comprueba qué opción se cumple." }
+        };
+
+        let aciertosTotales = 0;
+        const respondidas = new Set();
+        let historialEnvio = [];
+
+        function checkGroupAnswer(cardId, seleccion) {
+            if (respondidas.has(cardId)) return;
+
+            const contenedor = document.getElementById(cardId);
+            const feedbackBox = document.getElementById(`fb_${cardId}`);
+            const botones = contenedor.querySelectorAll('.option-btn');
+            
+            botones.forEach(b => b.disabled = true);
+            let correcta = seleccion === respuestasCorrectas[cardId];
+
+            botones.forEach(b => {
+                if (b.textContent.trim().startsWith(seleccion)) {
+                    b.classList.add(correcta ? 'correct' : 'incorrect');
+                }
+                if (!correcta && b.textContent.trim().startsWith(respuestasCorrectas[cardId])) {
+                    b.classList.add('correct');
+                }
+            });
+
+            if (correcta) {
+                feedbackBox.textContent = retroalimentaciones[cardId].correct;
+                feedbackBox.className = "feedback correct";
+                aciertosTotales++;
+            } else {
+                feedbackBox.textContent = retroalimentaciones[cardId].incorrect;
+                feedbackBox.className = "feedback incorrect";
+            }
+
+            respondidas.add(cardId);
+            historialEnvio.push(`${cardId.toUpperCase()}: ${correcta ? '✅' : '❌'}`);
+            document.getElementById('global-score').textContent = aciertosTotales;
+        }
+
+        function generateReport(via) {
+            const alumno = document.getElementById('student-name').value.trim();
+            const curso = document.getElementById('student-grade').value.trim();
+
+            if (!alumno || !curso) {
+                alert("Por favor, llena los apartados de Nombre y Curso antes de enviar.");
+                return;
+            }
+
+            if (respondidas.size < 9) {
+                alert(`Has resuelto ${respondidas.size} de 9 actividades. Completa toda la página para habilitar el envío.`);
+                return;
+            }
+
+            const titulo = `📋 INFORME ESCOLAR: SISTEMAS DE ECUACIONES LINEALES`;
+            const cuerpo = `Estudiante: ${alumno}\nCurso: ${curso}\n\nCalificación Global: ${aciertosTotales}/9 actividades aprobadas.\n\nDesglose de Desempeño:\n${historialEnvio.sort().join('\n')}\n\nEfectuado y validado en la plataforma interactiva.`;
+
+            if (via === 'whatsapp') {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(titulo + '\n\n' + cuerpo)}`, '_blank');
+            } else if (via === 'email') {
+                window.location.href = `mailto:?subject=${encodeURIComponent(titulo)}&body=${encodeURIComponent(cuerpo)}`;
+            }
+        }
+    </script>
+</body>
+</html>
